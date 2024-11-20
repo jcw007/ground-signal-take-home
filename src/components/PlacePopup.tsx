@@ -2,6 +2,7 @@ import { BiX } from "react-icons/bi";
 import PinIcon from "./PinIcon";
 import { PlaceType } from "../types";
 import { useCallback } from "react";
+import CheckImage from "./CheckImage";
 
 function PlacePopup({
   place,
@@ -58,12 +59,14 @@ function PlacePopup({
           {/* Popup body */}
           <div className="bg-white flex-1 flex flex-col rounded-b p-2 gap-8">
             {/* description */}
-            <div className="flex-1">{description}</div>
+            <div className="flex-1">
+              {description || "No description available"}
+            </div>
             {/* images */}
-            {images.length && (
+            {!!images.length && (
               <div className="flex gap-2 overflow-x-auto whitespace-nowrap">
                 {images.map((imgUrl, index) => (
-                  <img
+                  <CheckImage
                     key={index}
                     src={imgUrl}
                     className="w-[calc(33%-0.25rem)]"
