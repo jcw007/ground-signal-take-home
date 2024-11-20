@@ -1,5 +1,5 @@
 import { useCallback, useRef, useState } from "react";
-import Map, { Marker, ViewStateChangeEvent } from "react-map-gl";
+import Map, { MapRef, Marker, ViewStateChangeEvent } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import PlaceSearch from "../PlaceSearch";
@@ -8,7 +8,7 @@ import { PlaceType } from "../../types";
 import PlacePopup from "../PlacePopup";
 
 function CustomMap() {
-  const mapRef = useRef(null);
+  const mapRef = useRef<MapRef>(null);
   const [viewState, setViewState] = useState({
     latitude: 38.953464,
     longitude: -94.179376,
@@ -28,7 +28,21 @@ function CustomMap() {
 
     if (latitude && longitude) {
       setSelectedPlace(place);
-      setViewState({ latitude, longitude, zoom: 15 });
+
+      if (mapRef.current) {
+        const map = mapRef.current.getMap();
+
+        // Use fly to animation
+        map.flyTo({
+          center: [longitude, latitude],
+          zoom: 15,
+          speed: 5,
+          curve: 1,
+        });
+      } else {
+        // Default to using view state change
+        setViewState({ latitude, longitude, zoom: 15 });
+      }
     }
   }, []);
 

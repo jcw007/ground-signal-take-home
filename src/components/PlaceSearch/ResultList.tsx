@@ -37,7 +37,12 @@ function ResultList({
   return isSearching ? (
     <div className="mt-4 shadow-md">
       {/* List header */}
-      <div className="bg-blue-500 text-white font-bold p-3 rounded-t">
+      {/* Round all four corners if displying no result message */}
+      <div
+        className={`bg-blue-500 text-white font-bold p-3 ${
+          results.length ? "rounded-t" : "rounded"
+        }`}
+      >
         {foundResultString}
       </div>
       {/* List items */}
