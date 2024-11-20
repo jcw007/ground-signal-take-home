@@ -1,11 +1,12 @@
 import { useCallback, useRef, useState } from "react";
-import Map, { MapRef, Marker, ViewStateChangeEvent } from "react-map-gl";
+import Map, { MapRef, ViewStateChangeEvent } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
 import PlaceSearch from "../PlaceSearch";
-import PinIcon from "../PinIcon";
 import { PlaceType } from "../../types";
 import PlacePopup from "../PlacePopup";
+import PinMarker from "../PinMarker";
+import PlaceList from "../PlaceList";
 
 function CustomMap() {
   const mapRef = useRef<MapRef>(null);
@@ -34,18 +35,19 @@ function CustomMap() {
 
         // Use fly to animation
         map.flyTo({
-          center: [longitude, latitude],
+          center: [+longitude, +latitude],
           zoom: 15,
           speed: 5,
           curve: 1,
         });
       } else {
         // Default to using view state change
-        setViewState({ latitude, longitude, zoom: 15 });
+        setViewState({ latitude: +latitude, longitude: +longitude, zoom: 15 });
       }
     }
   }, []);
 
+  // TODO: fix typing here
   const handlePlaceMarkerClick = useCallback((e) => {
     e.originalEvent?.stopPropagation();
     setPlacePopupOpen(true);
@@ -69,14 +71,16 @@ function CustomMap() {
       </div>
       {/* Place markers */}
       {!!selectedPlace && (
-        <Marker
-          latitude={selectedPlace.location.lat}
-          longitude={selectedPlace.location.lon}
+        <PinMarker
+          lat={+selectedPlace.location.lat}
+          lon={+selectedPlace.location.lon}
           onClick={handlePlaceMarkerClick}
-        >
-          <PinIcon />
-        </Marker>
+        />
       )}
+
+      {/* Place List */}
+      <PlaceList />
+
       {/* Place popup */}
       {!!selectedPlace && placePopupOpen && (
         <PlacePopup

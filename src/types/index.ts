@@ -2,8 +2,8 @@ export type PlaceType = {
   id: string | number;
   name: string;
   location: {
-    lat: number;
-    lon: number;
+    lat: number | string;
+    lon: number | string;
   };
   details?: {
     description: string;

@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, MouseEvent } from "react";
 import { PlaceType } from "../../types";
 import PinIcon from "../PinIcon";
 
@@ -17,7 +17,7 @@ function ResultList({
   }, [results]);
 
   const handleListItemClick = useCallback(
-    (e: React.MouseEvent<HTMLDivElement>) => {
+    (e: MouseEvent<HTMLDivElement>) => {
       const id = e.currentTarget.dataset.id;
 
       if (id != null) {
