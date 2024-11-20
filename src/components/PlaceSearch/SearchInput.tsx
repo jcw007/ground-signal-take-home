@@ -6,7 +6,7 @@ function SearchInput({
 }: {
   onInputChange?: (query: string) => void;
 }) {
-  const [query, setQuery] = useState<string>("Arctic Ice Cream");
+  const [query, setQuery] = useState<string>("");
 
   const handleInputChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
