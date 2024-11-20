@@ -1,7 +1,7 @@
 import { type MouseEvent, useCallback, useState } from "react";
 import { PlaceType } from "../../types";
 import PlaceForm from "./PlaceForm";
-import { BiX } from "react-icons/bi";
+import { BiSolidChevronLeft, BiSolidChevronRight, BiX } from "react-icons/bi";
 import usePlaceData from "../../hooks/usePlaceData";
 import { useMap } from "react-map-gl";
 
@@ -69,7 +69,13 @@ function PlaceList() {
         <button
           className="w-8 h-28 [clip-path:polygon(0%_10%,100%_0%,100%_100%,0%_90%)] bg-pink-500"
           onClick={() => setExpanded(!expanded)}
-        ></button>
+        >
+          {expanded ? (
+            <BiSolidChevronRight className="w-8 h-8" />
+          ) : (
+            <BiSolidChevronLeft className="w-8 h-8" />
+          )}
+        </button>
       </div>
       <div className="flex-1 flex flex-col bg-white">
         <div className="text-xl text-center p-2">Places</div>

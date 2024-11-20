@@ -7,6 +7,8 @@ import { PlaceType } from "../../types";
 import PlacePopup from "../PlacePopup";
 import PinMarker from "../PinMarker";
 import PlaceList from "../PlaceList";
+import usePlaceData from "../../hooks/usePlaceData";
+import { printPlaceArrayToContent } from "../../utils/printPlaceArrayToContent";
 
 function CustomMap() {
   const mapRef = useRef<MapRef>(null);
@@ -17,6 +19,7 @@ function CustomMap() {
   });
   const [selectedPlace, setSelectedPlace] = useState<PlaceType | undefined>();
   const [placePopupOpen, setPlacePopupOpen] = useState<boolean>(false);
+  const { getStarredLocations } = usePlaceData();
 
   const handleMapMove = useCallback((e: ViewStateChangeEvent) => {
     setViewState(e.viewState);
@@ -57,6 +60,21 @@ function CustomMap() {
     setPlacePopupOpen(false);
   }, []);
 
+  // Hit the API to get a list of starred locations/places and
+  // output the result to a new tab.
+  const handleDownloadBtnClick = useCallback(async () => {
+    const results = await getStarredLocations();
+    const newTab = window.open("", "_blank");
+
+    if (newTab && results?.length) {
+      const content = printPlaceArrayToContent(results);
+      newTab.document.write(content);
+      newTab.document.close();
+    } else {
+      alert("Nothing to show");
+    }
+  }, [getStarredLocations]);
+
   return (
     <Map
       ref={mapRef}
@@ -65,6 +83,16 @@ function CustomMap() {
       mapStyle="mapbox://styles/mapbox/streets-v9"
       onMove={handleMapMove}
     >
+      {/* Download starred locations tab */}
+      <div className="absolute w-full text-center">
+        <button
+          className="bg-green-500 px-4 h-10 [clip-path:polygon(0%_0%,100%_0%,90%_100%,10%_100%)]"
+          onClick={handleDownloadBtnClick}
+        >
+          Download Starred Locations
+        </button>
+      </div>
+
       {/* Place Search control */}
       <div className="absolute top-0 left-0">
         <PlaceSearch onResultClick={handlePlaceSearchResultClick} />

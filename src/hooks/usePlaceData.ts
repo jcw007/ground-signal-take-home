@@ -52,21 +52,6 @@ const usePlaceData = () => {
     }
   };
 
-  // Get all place records
-  // const getPlaceList = async (): Promise<PlaceType[]> => {
-  //   try {
-  //     const response = await fetch(apiURL);
-
-  //     return await response.json();
-  //   } catch (error) {
-  //     if (error instanceof Error) {
-  //       console.error("Error retrieving place records", error.message);
-  //     }
-
-  //     return [];
-  //   }
-  // };
-
   // Update an existing place record
   const updatePlace = async (place: PlaceType) => {
     try {
@@ -113,7 +98,43 @@ const usePlaceData = () => {
     }
   };
 
-  return { places, loading, error, createPlace, updatePlace, deletePlace };
+  // Get starred locations
+  const getStarredLocations = async (): Promise<PlaceType[] | undefined> => {
+    try {
+      const response = await fetch(`${apiURL}?starred=true`);
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error retrieving starred locations", error.message);
+      }
+    }
+  };
+
+  const searchPlaceByName = async (
+    query: string
+  ): Promise<PlaceType[] | undefined> => {
+    try {
+      const response = await fetch(`${apiURL}?name=${query}`);
+
+      return await response.json();
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("Error searching by name", error.message);
+      }
+    }
+  };
+
+  return {
+    places,
+    loading,
+    error,
+    createPlace,
+    updatePlace,
+    deletePlace,
+    getStarredLocations,
+    searchPlaceByName,
+  };
 };
 
 export default usePlaceData;

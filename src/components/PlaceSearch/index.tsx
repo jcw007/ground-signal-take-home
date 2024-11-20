@@ -2,18 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { PlaceType } from "../../types";
 import SearchInput from "./SearchInput";
 import ResultList from "./ResultList";
-
-async function fetchPlaceSearchResults(
-  query: string
-): Promise<PlaceType[] | undefined> {
-  try {
-    const response = await fetch(`http://localhost:3000/places?name=${query}`);
-
-    return response.json();
-  } catch (error) {
-    console.error("Error fetching search results", error);
-  }
-}
+import usePlaceData from "../../hooks/usePlaceData";
 
 function PlaceSearch({
   onResultClick = () => {},
@@ -23,6 +12,7 @@ function PlaceSearch({
   const timerIdRef = useRef<number>();
   const [results, setResults] = useState<PlaceType[]>([]);
   const [isSearching, setIsSearching] = useState<boolean>(false);
+  const { searchPlaceByName } = usePlaceData();
 
   const handleResultClick = useCallback(
     (place: PlaceType) => {
@@ -31,28 +21,31 @@ function PlaceSearch({
     [onResultClick]
   );
 
-  const handleSearchInputChange = useCallback((query: string) => {
-    const trimmedQuery = query.trim();
+  const handleSearchInputChange = useCallback(
+    (query: string) => {
+      const trimmedQuery = query.trim();
 
-    setIsSearching(false);
+      setIsSearching(false);
 
-    if (trimmedQuery.length) {
-      setIsSearching(true);
+      if (trimmedQuery.length) {
+        setIsSearching(true);
 
-      // Debounce search by 300ms
-      if (timerIdRef.current) {
-        clearTimeout(timerIdRef.current);
-      }
-
-      timerIdRef.current = setTimeout(async () => {
-        const results = await fetchPlaceSearchResults(trimmedQuery);
-
-        if (results) {
-          setResults(results);
+        // Debounce search by 300ms
+        if (timerIdRef.current) {
+          clearTimeout(timerIdRef.current);
         }
-      }, 300);
-    }
-  }, []);
+
+        timerIdRef.current = setTimeout(async () => {
+          const results = await searchPlaceByName(trimmedQuery);
+
+          if (results) {
+            setResults(results);
+          }
+        }, 300);
+      }
+    },
+    [searchPlaceByName]
+  );
 
   return (
     <div className="m-2 w-96">
