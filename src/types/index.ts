@@ -19,4 +19,5 @@ export type PlaceType = {
     };
   };
   images?: string[];
+  starred?: boolean;
 };

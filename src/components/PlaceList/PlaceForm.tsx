@@ -23,6 +23,7 @@ function PlaceForm({
       description: place.details?.description || "",
       website: place.details?.website || "",
     },
+    starred: place.starred || false,
   });
   const [loading, setLoading] = useState<boolean>(false);
 
@@ -89,13 +90,26 @@ function PlaceForm({
           description: "",
           website: "",
         },
+        starred: false,
       } as PlaceType);
     }
     setLoading(false);
   }, [onSaveBtnClick, place.id, placeLocalState]);
 
+  const handleStarredChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const starred = e.target.checked;
+
+      setPlaceLocalState((prev) => ({
+        ...prev,
+        starred,
+      }));
+    },
+    []
+  );
+
   return (
-    <div className="border border-black pb-2">
+    <div className="pb-2">
       <table className="border-separate">
         <tbody>
           {/* Name field */}
@@ -162,6 +176,19 @@ function PlaceForm({
                 value={placeLocalState.details!.website}
                 disabled={loading}
                 onChange={handleWebsiteChange}
+              />
+            </td>
+          </tr>
+          {/* starred */}
+          <tr>
+            <td className="font-bold">starred</td>
+            <td>
+              <input
+                type="checkbox"
+                className="border border-gray-400"
+                checked={placeLocalState.starred}
+                disabled={loading}
+                onChange={handleStarredChange}
               />
             </td>
           </tr>
