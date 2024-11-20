@@ -44,3 +44,11 @@
    ```
    npx json-server --watch data/db.json
    ```
+
+![Screenshot from 2024-11-20 13-19-15](https://github.com/user-attachments/assets/29c903aa-76d1-4222-9416-235ee4d52087)
+
+
+
+![Screenshot from 2024-11-20 13-19-06](https://github.com/user-attachments/assets/84f62c13-8647-4d7c-9622-72ea6dfedf7c)
+
+
