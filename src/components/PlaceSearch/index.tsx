@@ -27,7 +27,7 @@ function PlaceSearch({
       <SearchInput onFinishSearch={handleFinishSearch} />
 
       {/* search results */}
-      <ResultList results={results} onResultClick={handleResultClick} />
+      <ResultList results={results} onListItemClick={handleResultClick} />
     </div>
   );
 }

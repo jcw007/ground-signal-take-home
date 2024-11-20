@@ -1,47 +1,55 @@
-import PinIcon from "../PinIcon";
+import { useCallback, useMemo } from "react";
 import { PlaceType } from "../../types";
-import { useCallback } from "react";
+import PinIcon from "../PinIcon";
 
 function ResultList({
   results,
-  onResultClick = () => {},
+  onListItemClick = () => {},
 }: {
   results: PlaceType[];
-  onResultClick?: (place: PlaceType) => void;
+  onListItemClick?: (place: PlaceType) => void;
 }) {
-  const handleResultClick = useCallback(
+  // List header string
+  const foundResultString = useMemo(() => {
+    return `Found ${results.length} Result${results.length > 1 ? "s" : ""}`;
+  }, [results]);
+
+  const handleListItemClick = useCallback(
     (e: React.MouseEvent<HTMLDivElement>) => {
       const id = e.currentTarget.dataset.id;
 
       if (id != null) {
-        const found = results.find((result) => result.id === id);
+        // Find place object by id.
+        // Converting result.id to number because json-server sometimes
+        // converts id to string.
+        const found = results.find((result) => +result.id === +id);
 
         if (found) {
-          onResultClick(found);
-          // setQuery("");
-          // setResults([]);
+          onListItemClick(found);
         }
       }
     },
-    [onResultClick, results]
+    [onListItemClick, results]
   );
 
   return results.length ? (
     <div className="mt-4 shadow-md">
-      <div className="bg-blue-500 text-white font-bold p-3">
-        Found {results.length} Result(s):
+      {/* List header */}
+      <div className="bg-blue-500 text-white font-bold p-3 rounded-t">
+        {foundResultString}
       </div>
+      {/* List items */}
       {results.map(({ id, name, location: { lat, lon } }) => (
         <div
           key={id}
-          className="flex bg-white p-2 gap-2 cursor-pointer hover:bg-gray-200"
+          className="flex items-center bg-white p-2 gap-2 cursor-pointer hover:bg-gray-200 last:rounded"
           data-id={id}
-          onClick={handleResultClick}
+          onClick={handleListItemClick}
         >
           <PinIcon />
-          <div className="gap-1 flex-1 flex flex-col">
+          <div className="flex-1 flex flex-col">
             <div className="font-bold text-sm">{name}</div>
-            <div>
+            <div className="text-gray-400">
               {lat}, {lon}
             </div>
           </div>

@@ -1,5 +1,11 @@
+import CustomMap from "./components/Map";
+
 function App() {
-  return <div className="border border-black">hello world</div>;
+  return (
+    <div className="w-screen h-screen">
+      <CustomMap />
+    </div>
+  );
 }
 
 export default App;

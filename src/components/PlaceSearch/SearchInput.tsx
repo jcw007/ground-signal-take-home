@@ -41,7 +41,7 @@ function SearchInput({
   );
 
   return (
-    <div className="flex gap-4 p-4 items-center shadow-md bg-white">
+    <div className="flex gap-4 p-4 items-center shadow-md bg-white rounded">
       <BiSearch className="h-5 w-5" />
       <input
         className="text-base flex-1 outline-none"
