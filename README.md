@@ -1,50 +1,46 @@
-# React + TypeScript + Vite
+## Ground Signal Take-home Coding Assignment
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+### Technologies Utilized
 
-Currently, two official plugins are available:
+#### Frontend
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **React**: Implemented with a data store and custom hooks to encapsulate data-related logic. The application comprises:
+  - A map component powered by react-map-gl
+  - A search input component for text-based queries
+  - A drawer component housing the add new location/place form and existing locations list
+  - A modal popup displaying selected location details
+  - A clickable tab for exporting starred location data
+- **react-map-gl**: Chosen over Google Maps due to API key recognition issues
+- **Recharts**: Utilized for rendering average store traffic bar charts
+- **Zustand**: Employed for global state management, storing place data from JSON file for cross-component access
+- **React Icons**: Provides a comprehensive icon collection for React
+- **TailwindCSS**: Facilitates component styling without separate CSS files
 
-## Expanding the ESLint configuration
+#### Backend
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **json-server**: Sufficient for this assignment, though a more robust solution like Express.js or Apollo/GraphQL would be preferable in a production environment
 
-- Configure the top-level `parserOptions` property like this:
+### Requirement Implementation Notes
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1. **Autocomplete Search Field**: Implements a 300ms debounce to optimize API calls during user input.
+2. **Locations/Markers**: Persist on the map until a new search is executed.
+3. **Location Starring**: Retrieves starred locations from the API by checking the "starred" property in each location object. Note: Initial implementation revealed inconsistencies in json-server's handling of boolean values and object IDs.
+4. **CRUD/Data Synchronization**: Generally effective between Zustand store and json-server, with some areas requiring further investigation for real-time updates.
+5. **User Interface**: Further refinement opportunities exist, particularly for the Place list in the right drawer.
+6. **Unit Testing**: If time permits, I would implement unit tests to ensure the reliability of critical components and functions. This would involve writing tests that validate the expected behavior of the application’s features, such as the search functionality and data synchronization processes. Utilizing frameworks like Jest or Mocha would facilitate automated testing, helping to catch bugs early and improve overall code quality.
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+## Application Setup Instructions
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+1. Clone the repository and navigate to the project directory.
+2. Install dependencies:
+   ```
+   npm install
+   ```
+3. Launch the frontend application:
+   ```
+   npm run dev
+   ```
+4. Start json-server:
+   ```
+   npx json-server --watch data/db.json
+   ```
