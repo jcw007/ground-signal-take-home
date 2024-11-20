@@ -2,13 +2,13 @@ import { useCallback, useRef, useState } from "react";
 import Map, { MapRef, ViewStateChangeEvent } from "react-map-gl";
 
 import "mapbox-gl/dist/mapbox-gl.css";
-import PlaceSearch from "../PlaceSearch";
-import { PlaceType } from "../../types";
-import PlacePopup from "../PlacePopup";
-import PinMarker from "../PinMarker";
-import PlaceList from "../PlaceList";
-import usePlaceData from "../../hooks/usePlaceData";
-import { printPlaceArrayToContent } from "../../utils/printPlaceArrayToContent";
+import PlaceSearch from "./PlaceSearch";
+import { PlaceType } from "../types";
+import PlacePopup from "./PlacePopup";
+import PinMarker from "./PinMarker";
+import PlaceList from "./PlaceList";
+import usePlaceData from "../hooks/usePlaceData";
+import { printPlaceArrayToContent } from "../utils/printPlaceArrayToContent";
 
 function CustomMap() {
   const mapRef = useRef<MapRef>(null);

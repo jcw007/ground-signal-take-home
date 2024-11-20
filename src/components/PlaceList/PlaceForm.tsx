@@ -24,6 +24,7 @@ function PlaceForm({
       website: place.details?.website || "",
     },
     starred: place.starred || false,
+    images: place.images || [],
   });
   const [loading, setLoading] = useState<boolean>(false);
 

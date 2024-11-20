@@ -4,6 +4,7 @@ import { PlaceType } from "../types";
 import { useCallback, useState } from "react";
 import CheckImage from "./CheckImage";
 import usePlaceData from "../hooks/usePlaceData";
+import AverageStoreTrafficBarChart from "./AverageStoreTrafficBarChart";
 
 function PlacePopup({
   place,
@@ -15,7 +16,7 @@ function PlacePopup({
   const {
     name,
     images = [],
-    details: { description } = {},
+    details: { description, website, avgStoreTraffic } = {},
     location: { lat, lon },
   } = place;
   const { updatePlace } = usePlaceData();
@@ -28,6 +29,9 @@ function PlacePopup({
     window.open(website);
   }, [place]);
 
+  // Check/uncheck the star.
+  // TODO: Change is saved to DB, but the Place list on the right
+  // isn't refreshed.
   const handleStarBtnClick = useCallback(async () => {
     await updatePlace({
       ...place,
@@ -72,7 +76,7 @@ function PlacePopup({
             </div>
 
             {/* Visit website button */}
-            {!!place.details?.website && (
+            {!!website && (
               <button
                 className="text-white font-bold bg-blue-600 px-4 py-2 rounded"
                 onClick={handleVisitWebsiteBtnClick}
@@ -87,6 +91,12 @@ function PlacePopup({
             <div className="flex-1">
               {description || "No description available"}
             </div>
+            {/* chart */}
+            {avgStoreTraffic && (
+              <div>
+                <AverageStoreTrafficBarChart data={avgStoreTraffic} />
+              </div>
+            )}
             {/* images */}
             {!!images.length && (
               <div className="flex gap-2 overflow-x-auto whitespace-nowrap">
