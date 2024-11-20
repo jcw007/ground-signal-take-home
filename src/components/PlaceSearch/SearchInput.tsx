@@ -1,43 +1,21 @@
-import { ChangeEvent, useCallback, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { BiSearch } from "react-icons/bi";
-import { PlaceType } from "../../types";
 
 function SearchInput({
-  onFinishSearch = () => {},
+  onInputChange = () => {},
 }: {
-  onFinishSearch?: (places: PlaceType[]) => void;
+  onInputChange?: (query: string) => void;
 }) {
   const [query, setQuery] = useState<string>("Alberts Bike Shop");
-  const timerIdRef = useRef<number>();
-
-  const doPlaceSearch = useCallback(async (query: string) => {
-    const response = await fetch(`http://localhost:3000/places?name=${query}`);
-
-    return await response.json();
-  }, []);
 
   const handleInputChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>) => {
       const newQuery = e.target.value;
 
-      if (timerIdRef.current) {
-        clearTimeout(timerIdRef.current);
-      }
-
-      // do search after stop typing for 1s
-      timerIdRef.current = setTimeout(async () => {
-        let results = [];
-
-        if (newQuery.length) {
-          results = await doPlaceSearch(newQuery);
-        }
-
-        onFinishSearch(results);
-      }, 100);
-
       setQuery(newQuery);
+      onInputChange(newQuery);
     },
-    [onFinishSearch, doPlaceSearch]
+    [onInputChange]
   );
 
   return (

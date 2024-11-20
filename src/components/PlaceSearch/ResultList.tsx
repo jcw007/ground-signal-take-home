@@ -3,9 +3,11 @@ import { PlaceType } from "../../types";
 import PinIcon from "../PinIcon";
 
 function ResultList({
+  isSearching = false,
   results,
   onListItemClick = () => {},
 }: {
+  isSearching?: boolean;
   results: PlaceType[];
   onListItemClick?: (place: PlaceType) => void;
 }) {
@@ -32,7 +34,7 @@ function ResultList({
     [onListItemClick, results]
   );
 
-  return results.length ? (
+  return isSearching ? (
     <div className="mt-4 shadow-md">
       {/* List header */}
       <div className="bg-blue-500 text-white font-bold p-3 rounded-t">
