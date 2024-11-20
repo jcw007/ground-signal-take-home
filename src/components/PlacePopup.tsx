@@ -1,8 +1,9 @@
-import { BiX } from "react-icons/bi";
+import { BiSolidStar, BiX } from "react-icons/bi";
 import PinIcon from "./PinIcon";
 import { PlaceType } from "../types";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import CheckImage from "./CheckImage";
+import usePlaceData from "../hooks/usePlaceData";
 
 function PlacePopup({
   place,
@@ -17,12 +18,24 @@ function PlacePopup({
     details: { description } = {},
     location: { lat, lon },
   } = place;
+  const { updatePlace } = usePlaceData();
+  // Use a local state to track starred value
+  const [starred, setStarred] = useState(place.starred || false);
 
   const handleVisitWebsiteBtnClick = useCallback(() => {
     const { details: { website } = {} } = place;
 
     window.open(website);
   }, [place]);
+
+  const handleStarBtnClick = useCallback(async () => {
+    await updatePlace({
+      ...place,
+      starred: !starred,
+    });
+
+    setStarred(!starred);
+  }, [place, starred, updatePlace]);
 
   return (
     // Backdrop
@@ -40,12 +53,24 @@ function PlacePopup({
           {/* Popup header */}
           <div className="flex p-2 gap-2 bg-white rounded-t items-center border-b border-b-gray-300">
             <PinIcon />
+            {/* Name & lat/lon */}
             <div className="flex-1">
               <div className="text-base font-bold">{name}</div>
               <div className="text-gray-400">
                 {lat}, {lon}
               </div>
             </div>
+
+            <div>
+              <button data-id={place.id} onClick={handleStarBtnClick}>
+                <BiSolidStar
+                  className={`w-4 h-4 ${
+                    starred ? "text-yellow-400" : "text-gray-300"
+                  }`}
+                />
+              </button>
+            </div>
+
             {/* Visit website button */}
             {!!place.details?.website && (
               <button

@@ -24,7 +24,9 @@ function ResultList({
         // Find place object by id.
         // Converting result.id to number because json-server sometimes
         // converts id to string.
-        const found = results.find((result) => +result.id === +id);
+        const found = results.find(
+          (result) => result.id.toString() === id.toString()
+        );
 
         if (found) {
           onListItemClick(found);

@@ -3,11 +3,13 @@ import { PlaceType } from "../../types";
 import PlaceForm from "./PlaceForm";
 import { BiX } from "react-icons/bi";
 import usePlaceData from "../../hooks/usePlaceData";
+import { useMap } from "react-map-gl";
 
 // A component for displaying a list of places from db
 function PlaceList() {
   const [expanded, setExpanded] = useState(true);
   const { places, createPlace, updatePlace, deletePlace } = usePlaceData();
+  const { current: map } = useMap();
 
   // Update place record
   const handleExistingPlaceListSaveBtnClick = useCallback(
@@ -45,6 +47,17 @@ function PlaceList() {
     [deletePlace]
   );
 
+  const handleSeeOnMapClick = useCallback(
+    (e: MouseEvent<HTMLButtonElement>) => {
+      const { lat, lon } = e.currentTarget.dataset;
+
+      if (lat && lon && map) {
+        map.flyTo({ center: [+lon, +lat], zoom: 15 });
+      }
+    },
+    [map]
+  );
+
   return (
     <div
       className={`absolute right-0 h-full flex transition-all duration-500 ${
@@ -72,9 +85,19 @@ function PlaceList() {
         <div className="flex-1 overflow-y-auto">
           {places.map((place) => (
             // Card item for each place
-            <div key={place.id}>
+            <div key={place.id} className="border border-black rounded m-1">
               <div className="flex">
                 <div className="flex-1">ID: {place.id}</div>
+                <div className="flex-1">
+                  <button
+                    className="underline"
+                    data-lat={place.location.lat}
+                    data-lon={place.location.lon}
+                    onClick={handleSeeOnMapClick}
+                  >
+                    See on map
+                  </button>
+                </div>
                 <button
                   data-id={place.id}
                   onClick={handlePlaceListItemDeleteBtnClick}
